@@ -3,6 +3,7 @@ FROM alpine:edge
 RUN apk add --update \
 		bash \
 		certbot \
+		py2-pip \
 		tini \
 	&& rm -rf /var/cache/apk/*
 
@@ -14,6 +15,7 @@ ENV VIRTUAL_HOST_WEIGHT="999"
 ENV PATH="/opt/letsencrypt/bin:$PATH"
 
 COPY . /opt/letsencrypt/
+RUN pip install --upgrade setuptools argparse
 RUN ln -fs /opt/letsencrypt/bin/update-certs.sh /etc/periodic/daily/
 
 ENTRYPOINT ["tini", "--"]
